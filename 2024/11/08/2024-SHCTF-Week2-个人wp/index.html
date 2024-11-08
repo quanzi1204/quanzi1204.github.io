@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <title>2024-SHCTF-Week2 个人wp | 泉子yeah的博客</title>
+    <meta name="author" content="泉子yeah" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>泉子YEAH的博客</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;泉子YEAH的博客</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>2024-SHCTF-Week2 个人wp</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/11/8
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/2024-SHCTF/" style="color: #00bcd4">
+                    2024 SHCTF
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h1><h3 id="魔鬼的步伐"><a href="#魔鬼的步伐" class="headerlink" title="魔鬼的步伐"></a>魔鬼的步伐</h3><h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>分析代码可知，get_Prime(bits) 函数通过不断乘以素数列表中的随机素数来生成具有 512 位的整数 n，并且当 n+1 是素数时，返回<br>n+1 作为最终的素数。这意味着生成的 p 和 q 都是形如 n+1 的素数，其中 n 是由一系列小素数的乘积构成的。由于 p−1 和 q−1 分别是 n 的形式，且 n 是多个小素数的乘积，因此这正好满足 Pollard p-1 算法的有利条件——即 p−1 或 q−1 的因数结构简单，质因数较小。于是使用 Pollard p-1 算法尝试解出 p、q。</p>
+<p><img src="/../images/c-1-0.png"></p>
+<p>解出 p、q 后，即可通过 RSA 解密公式计算出 flag 。</p>
+<p><img src="/../images/c-1-1731078290517-1.png"></p>
+<h4 id="走过的弯路"><a href="#走过的弯路" class="headerlink" title="走过的弯路"></a>走过的弯路</h4><p>尝试用 yafu 分解 n，发现不大现实。一开始一直想着如何去分解 n，花了很长时间。</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><pre><code class="python">from math import gcd
+from random import randint
+from Crypto.Util.number import isPrime
+#使用Pollard p-1算法解出p、q
+
+def pollard_p_1(n):
+    a = 2
+    for j in range(2, 1000000):
+        a = pow(a, j, n)
+        d = gcd(a - 1, n)
+        if 1 &lt; d &lt; n:
+            return d
+    return None
+
+n=543514616445422790198083720532689546624590492340555521024030311117434715179186273864338663015654690952939830023157945140697841424349476991571862865648541953711527975270498092190177109270767551251067699127640115185289018407380335418315287813136196086304021444838744494922127208961933673840136577399972603575494256337
+
+p = pollard_p_1(n)
+if p:
+    q = n // p
+    if isPrime(p) and isPrime(q):
+        print(f&quot;p = &#123;p&#125;&quot;)
+        print(f&quot;q = &#123;q&#125;&quot;)
+    else:
+        print(&quot;分解出的因数不是质数&quot;)
+else:
+    print(&quot;未能找到因数&quot;)
+</code></pre>
+<pre><code class="python">from Crypto.Util.number import long_to_bytes
+#解密flag
+
+e = 65537
+n=543514616445422790198083720532689546624590492340555521024030311117434715179186273864338663015654690952939830023157945140697841424349476991571862865648541953711527975270498092190177109270767551251067699127640115185289018407380335418315287813136196086304021444838744494922127208961933673840136577399972603575494256337
+c=157185027553633061643515865414531710414935986171709954123824982173839015574130745228718045017979479871257708914255971409515310829806785309932291154821022031652013248931644177023671037920459457153361527446694330717040813887189097373899853995920060655975057078665228340784207287219386817325293481914733274618976166879
+p=174747498778243120389812515506444152223227700010945689890870051247645373417501356100424444350815815650097646649734624696476520820139134649297186931605034297643
+q=3110285527663832278993249740779384188830142768325727901300995226581182829626140542514280799391628066419465251622753313829684711451324476138860509349383567859
+
+phi_n = (p - 1) * (q - 1)
+d = pow(e, -1, phi_n)
+m = pow(c, d, n)
+flag = long_to_bytes(m)
+print(flag)
+</code></pre>
+<h3 id="worde很大"><a href="#worde很大" class="headerlink" title="worde很大"></a>worde很大</h3><h4 id="解题思路-1"><a href="#解题思路-1" class="headerlink" title="解题思路"></a>解题思路</h4><p>和一般的 dp 泄露题不同，此题给的 e 值较大，无法通过遍历 e 来得到 p 。于是重新进行推理，推导过程如下：</p>
+<p>费马小定理告诉我们a^(p-1)≡1modp，其中a是不被p整除的数。此题中可令a&#x3D;2，所以：</p>
+<p>2^(p-1)≡1modp，</p>
+<p>这意味着2^(dp×e)modp等价于2modp，即2^(dp×e)≡2modp。设x&#x3D;2^(dp×e)modp，有：</p>
+<p>x-2&#x3D;kp，故可以通过计算gcd(x-2,n)来求得p。</p>
+<p>求得p后，自然可以解出 flag 。</p>
+<p><img src="/../images/c-2-1731078290517-2.png"></p>
+<h4 id="走过的弯路-1"><a href="#走过的弯路-1" class="headerlink" title="走过的弯路"></a>走过的弯路</h4><p>尝试去遍历 e 了，然后找了很多 dp 泄露的解题方法都无法解题。最后在<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1zX4y1r7vC/%E6%89%BE%E5%88%B0%E4%BA%86%E8%A7%A3%E9%A2%98%E6%96%B9%E6%B3%95%E3%80%82%E8%8A%B1%E8%B4%B9%E4%BA%86%E5%BE%88%E9%95%BF%E6%97%B6%E9%97%B4%E3%80%82">https://www.bilibili.com/video/BV1zX4y1r7vC/找到了解题方法。花费了很长时间。</a></p>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><pre><code class="python">from gmpy2 import gcd, powmod
+from Crypto.Util.number import long_to_bytes
+
+n=80658185991128973449670006228193738730387192394469130887183428227989109265049982259708888207698707084517384963168947513428311464326753290728605850400170719719994451710267034083214000541540682266123857975433095016132294375434461056570749563372609386517772549650262777147961483972492903062684131983063574465491
+c=40081104992742900979221303793954235573850091667487222919116266756096788058465262338619988029125916434523951060264419565726158276188920143742163721317894222962649965163247019565223019398922281805819066581867923209971908735971636370008542880943011053552837195709092670170062631195756465854968300218421952099644
+e=1099872152309029742363340186513024605512728883267871302576937
+dp=1340129833030072331618931873621362087969242971052440978720906583106810205030239432519082625277483083361212589279226362833965885368357600511344292479137289
+
+x = powmod(2, dp * e, n)
+
+p = gcd(x - 2, n)
+
+q = n // p
+
+phi_n = (p - 1) * (q - 1)
+d = powmod(e, -1, phi_n)
+
+m = pow(c, d, n)
+
+flag = long_to_bytes(m)
+print(flag)
+</code></pre>
+<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h3 id="自助查询"><a href="#自助查询" class="headerlink" title="自助查询"></a>自助查询</h3><h4 id="解题思路-2"><a href="#解题思路-2" class="headerlink" title="解题思路"></a>解题思路</h4><p>根据提示，网页给出了查询语句。可以通过SQL注入将注入的语句拼接到查询语句后，从而使网页查询语句命令的内容。所以先尝试查询flag表的行和列信息。</p>
+<p><img src="/../images/0-1.png"></p>
+<p>发现flag的内容并不在flag表中，但得到了提示，flag很可能在注释中。所以可以查看flag表的注释，从而得到flag。</p>
+<p><img src="/../images/0-0-1731078290517-3.png"></p>
+<h4 id="走过的弯路-2"><a href="#走过的弯路-2" class="headerlink" title="走过的弯路"></a>走过的弯路</h4><p>在flag表里没看见flag，尝试一个表一个表找注释，最后想到注释大概率应该在flag表里。</p>
+<h3 id="guess-the-number"><a href="#guess-the-number" class="headerlink" title="guess_the_number"></a>guess_the_number</h3><h4 id="解题思路-3"><a href="#解题思路-3" class="headerlink" title="解题思路"></a>解题思路</h4><p>在源代码中得到提示&#x2F;s0urce。</p>
+<p><img src="/../images/1-0.png"></p>
+<p>&#x2F;s0urce后得到app.py文件。</p>
+<p><img src="/../images/1-2.png"></p>
+<p>分析代码可知，由于 first_num 是使用 random.randint(1000000000, 9999999999) 生成的，并且是基于 seed 的，可以根据 first_num 进行逆向推导 seed。一旦通过逆向计算得到了 seed，就可以使用与服务器相同的伪随机数生成器设置种子，并生成出与服务器一致的 second_num。得到正确的 second_num 后，输入正确的 second_num 后就可以得到flag。已知第一个数: 4074555226 ，通过编写代码遍历 seed ，得到正确的 second_num 。</p>
+<p><img src="/../images/1-1.png"></p>
+<p>提交 second_num ，得到flag。</p>
+<p><img src="/../images/1-3.png"></p>
+<h4 id="走过的弯路-3"><a href="#走过的弯路-3" class="headerlink" title="走过的弯路"></a>走过的弯路</h4><p>遍历时间有点长，整体没走什么弯路。</p>
+<h4 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h4><pre><code class="python">import random
+
+def reverse_engineer_second_num(first_num):
+    for possible_seed in range(1000000, 9999999):
+        random.seed(possible_seed)
+        generated_first_num = random.randint(1000000000, 9999999999)
+        if generated_first_num == first_num:
+            second_num = random.randint(1000000000, 9999999999)
+            return second_num
+    return None
+
+first_num = 4074555226
+
+second_num = reverse_engineer_second_num(first_num)
+
+if second_num:
+    print(&quot;找到 second_num: &#123;second_num&#125;&quot;)
+else:
+    print(&quot;未找到匹配的 seed&quot;)
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 泉子yeah的博客
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;泉子yeah
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>
