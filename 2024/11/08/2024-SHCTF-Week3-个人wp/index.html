@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: 2024 SHCTF | 泉子yeah的博客</title>
+    <title>2024-SHCTF-Week3 个人wp | 泉子yeah的博客</title>
     <meta name="author" content="泉子yeah" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -37,6 +37,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -150,112 +154,111 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
-        
-        
-        
-        <span>
-            <a href="/tags/2024-SHCTF/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                2024 SHCTF
-            </a>
+            <div class="article">
+    <div>
+        <h1>2024-SHCTF-Week3 个人wp</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/11/8
         </span>
         
         
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/2024-SHCTF/" style="color: #00a596">
+                    2024 SHCTF
+                </a>
+            </span>
+            
+        </span>
         
-        
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/11/8</div>
-            <a href="/2024/11/08/2024-SHCTF-Week3-%E4%B8%AA%E4%BA%BAwp/">
-                <h3>2024-SHCTF-Week3 个人wp</h3>
-            </a>
-            <div class="info">
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/2024-SHCTF/" style="color: #00bcd4">
-                            2024 SHCTF
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <h1 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h1><h3 id="babyLCG"><a href="#babyLCG" class="headerlink" title="babyLCG"></a>babyLCG</h3><h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>由题目给出的代码可知，从题目中给出的关系式：</p>
+<p>seedi+1&#x3D;(seedi×a+b)modp</p>
+<p>对于每个 c[i]，可以写出：</p>
+<p>(c i≪80+x)×a+b&#x3D;(c i+1≪80+y)modp</p>
+<p>这里的 x 和 y 是未知的低位部分，可以将它们当作变量。</p>
+<p>通过上述方程，可以将问题转化为一个关于 x 和 y 的多项式方程。由于 x 和  y  的值较小（它们是在移位后剩余的部分），所以可以使用Coppersmith小根攻击来求解。</p>
+<p>可以构建一个函数，用来解决此类多项式中的小根问题。具体步骤如下：</p>
+<p>1.构造多项式：将该问题转换为一个关于 x 和 y 的二元多项式 f(x, y)，模数为 p。</p>
+<p>2.格约简（LLL）：通过LLL算法对多项式系数矩阵进行约简，寻找可能的解。</p>
+<p>3.求解小根：通过格约简找到小根，得到 x 和 y，进而恢复出种子的低位部分。</p>
+<p>一旦通过Coppersmith攻击得到了 x 和 y，就可以恢复出初始的 seed。接着通过 bytes.fromhex() 将 seed 转换回 flag。</p>
+<p><img src="/../images/3c-1.png"></p>
+<h4 id="走过的弯路"><a href="#走过的弯路" class="headerlink" title="走过的弯路"></a>走过的弯路</h4><p>题目很难想到求解的思路，思路来源于<a target="_blank" rel="noopener" href="https://blog.csdn.net/XiongSiqi_blog/article/details/130790621%E4%B8%AD%E7%9A%84%E9%A2%98%E4%B9%9D%E3%80%82">https://blog.csdn.net/XiongSiqi_blog/article/details/130790621中的题九。</a></p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><pre><code class="python">from sage.all import *
+import itertools
+
+a=2161364721286456117843582311023539363717340572633476837925851464242420932432660782078398556452296307163488446509226601271
+b=1551906747945467927023994893407950448651653579718682626917298316574784742374475918668176895864226441785104721011746626599
+p=2445258252525906983588289662694322599670439245627494352709483099316331542236595265266482299471833751602690050580082597097
+c=[1437363321724723713399585424008857187834107191582229177499333253425307288452979377012501213529971, 1528943808786662803864668778320419227261456820401043071683101652448456161387368579681418159590158, 1675913979256025010357215554995077089600657446913984312083028717741020180527495712859517429726603]
+
+PR.&lt;x,y&gt; = PolynomialRing(Zmod(p))
+f = ((c[0]&lt;&lt;80) + x) * a + b - ((c[1]&lt;&lt;80) + y)
+
+def small_roots(f, bounds, m=1, d=None):
+    if not d:
+        d = f.degree()
+    R = f.base_ring()
+    N = R.cardinality()
+    f /= f.coefficients().pop(0)
+    f = f.change_ring(ZZ)
+    G = Sequence([], f.parent())
+    for i in range(m+1):
+        base = N^(m-i) * f^i
+        for shifts in itertools.product(range(d), repeat=f.nvariables()):
+            g = base * prod(map(power, f.variables(), shifts))
+            G.append(g)
+    B, monomials = G.coefficient_matrix()
+    monomials = vector(monomials)
+    factors = [monomial(*bounds) for monomial in monomials]
+    for i, factor in enumerate(factors):
+        B.rescale_col(i, factor)
+    B = B.dense_matrix().LLL()
+    B = B.change_ring(QQ)
+    for i, factor in enumerate(factors):
+        B.rescale_col(i, 1/factor)
+    H = Sequence([], f.parent().change_ring(QQ))
+    for h in filter(None, B*monomials):
+        H.append(h)
+        I = H.ideal()
+        if I.dimension() == -1:
+            H.pop()
+        elif I.dimension() == 0:
+            roots = []
+            for root in I.variety(ring=ZZ):
+                root = tuple(R(root[var]) for var in f.variables())
+                roots.append(root)
+            return roots
+    return []
+
+roots = small_roots(f, (2^80, 2^80), m=4, d=4)
+s1 = (c[0]&lt;&lt;80) + roots[0][0]
+seed = (s1 - b) * inverse_mod(a, p) % p
+
+print(bytes.fromhex(hex(seed)[2:]))
+</code></pre>
+
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/11/8</div>
-            <a href="/2024/11/08/2024-SHCTF-Week2-%E4%B8%AA%E4%BA%BAwp/">
-                <h3>2024-SHCTF-Week2 个人wp</h3>
-            </a>
-            <div class="info">
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/2024-SHCTF/" style="color: #03a9f4">
-                            2024 SHCTF
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
-    </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/11/8</div>
-            <a href="/2024/11/08/2024-SHCTF-Week1-%E4%B8%AA%E4%BA%BAwp/">
-                <h3>2024 SHCTF-Week1 个人wp</h3>
-            </a>
-            <div class="info">
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/2024-SHCTF/" style="color: #ff7d73">
-                            2024 SHCTF
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
-    </div>
+    
+    
+    
+    
     
 </div>
 
@@ -287,6 +290,12 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 </body>
 </html>
