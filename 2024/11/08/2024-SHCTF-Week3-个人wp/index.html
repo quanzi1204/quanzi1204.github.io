@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/2024-SHCTF/" style="color: #00a596">
+                <a href="/tags/2024-SHCTF/" style="color: #ff7d73">
                     2024 SHCTF
                 </a>
             </span>
@@ -197,7 +197,7 @@
 <p>3.求解小根：通过格约简找到小根，得到 x 和 y，进而恢复出种子的低位部分。</p>
 <p>一旦通过Coppersmith攻击得到了 x 和 y，就可以恢复出初始的 seed。接着通过 bytes.fromhex() 将 seed 转换回 flag。</p>
 <p><img src="/../images/3c-1.png"></p>
-<h4 id="走过的弯路"><a href="#走过的弯路" class="headerlink" title="走过的弯路"></a>走过的弯路</h4><p>题目很难想到求解的思路，思路来源于<a target="_blank" rel="noopener" href="https://blog.csdn.net/XiongSiqi_blog/article/details/130790621%E4%B8%AD%E7%9A%84%E9%A2%98%E4%B9%9D%E3%80%82">https://blog.csdn.net/XiongSiqi_blog/article/details/130790621中的题九。</a></p>
+<h4 id="走过的弯路"><a href="#走过的弯路" class="headerlink" title="走过的弯路"></a>走过的弯路</h4><p>题目很难想到求解的思路，思路来源于<a target="_blank" rel="noopener" href="https://blog.csdn.net/XiongSiqi_blog/article/details/130790621">https://blog.csdn.net/XiongSiqi_blog/article/details/130790621</a> 中的题九。</p>
 <h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><pre><code class="python">from sage.all import *
 import itertools
 

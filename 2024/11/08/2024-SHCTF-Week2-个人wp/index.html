@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/2024-SHCTF/" style="color: #00a596">
+                <a href="/tags/2024-SHCTF/" style="color: #03a9f4">
                     2024 SHCTF
                 </a>
             </span>
@@ -239,7 +239,7 @@ print(flag)
 <p>x-2&#x3D;kp，故可以通过计算gcd(x-2,n)来求得p。</p>
 <p>求得p后，自然可以解出 flag 。</p>
 <p><img src="/../images/c-2-1731078290517-2.png"></p>
-<h4 id="走过的弯路-1"><a href="#走过的弯路-1" class="headerlink" title="走过的弯路"></a>走过的弯路</h4><p>尝试去遍历 e 了，然后找了很多 dp 泄露的解题方法都无法解题。最后在<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1zX4y1r7vC/%E6%89%BE%E5%88%B0%E4%BA%86%E8%A7%A3%E9%A2%98%E6%96%B9%E6%B3%95%E3%80%82%E8%8A%B1%E8%B4%B9%E4%BA%86%E5%BE%88%E9%95%BF%E6%97%B6%E9%97%B4%E3%80%82">https://www.bilibili.com/video/BV1zX4y1r7vC/找到了解题方法。花费了很长时间。</a></p>
+<h4 id="走过的弯路-1"><a href="#走过的弯路-1" class="headerlink" title="走过的弯路"></a>走过的弯路</h4><p>尝试去遍历 e 了，然后找了很多 dp 泄露的解题方法都无法解题。最后在<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1zX4y1r7vC/">https://www.bilibili.com/video/BV1zX4y1r7vC/</a> 找到了解题方法。花费了很长时间。</p>
 <h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><pre><code class="python">from gmpy2 import gcd, powmod
 from Crypto.Util.number import long_to_bytes
 
