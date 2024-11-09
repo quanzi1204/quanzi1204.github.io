@@ -181,6 +181,300 @@
         
 
 <div class="post">
+    <a href="/2024/11/09/hackergame-2024-%E4%B8%AA%E4%BA%BAwp/">
+        <h2 class="post-title">hackergame 2024 个人wp</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/writeup/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                writeup
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/11/9
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h3 id="签到题"><a href="#签到题" class="headerlink" title="签到题"></a>签到题</h3><h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>通过网页源代码可知，网页通过 pass 参数判断是否输入成功。</p>
+<p><img src="/../images/1-1-1731127293339-1.png"></p>
+<p>于是直接让 pass &#x3D; true ，即可得到 flag。</p>
+<p><img src="/../images/1-1731127293339-2.png"></p>
+<h3 id="喜欢做签到的-CTFer-你们好呀"><a href="#喜欢做签到的-CTFer-你们好呀" class="headerlink" title="喜欢做签到的 CTFer 你们好呀"></a>喜欢做签到的 CTFer 你们好呀</h3><h4 id="解题思路-1"><a href="#解题思路-1" class="headerlink" title="解题思路"></a>解题思路</h4><p>审计 .js 代码可知，服务器隐藏了一个名为 .flag 的文件。</p>
+<p><img src="/../images/3-1-1.png"></p>
+<p>知道了位置，从而可以直接读取 flag 的内容。</p>
+<p><img src="/../images/3-1-2.png"></p>
+<p>而另一个 flag 在 env 文件中，比较容易找到。（虽然我先找到的是难的那个）</p>
+<p><img src="/../images/3-1-3.png"></p>
+<h3 id="比大小王"><a href="#比大小王" class="headerlink" title="比大小王"></a>比大小王</h3><h4 id="解题思路-2"><a href="#解题思路-2" class="headerlink" title="解题思路"></a>解题思路</h4><p>分析代码可知，网页读取我们选择的每一个 &lt;、&gt; 号，存入 inputs 数组后，当 score1 为 100 时，将整个 inputs 数组发送给服务器。进一步分析代码可知，生成的 100 个随机数是一次性生成的。故而可以直接读取这 100 个随机数，一次性比较完，将比较出的符号存入 inputs 数组，再修改分数为 100，即可在较短时间内提交。保险起见，只存入前 99 个符号，最后一个自己比较以保证 inputs 数组能被成功发送。可以直接在控制台用 JavaScript 代码直接完成这些步骤，从而得到 flag。</p>
+<p><img src="/../images/3-1-0.png"></p>
+<h3 id="Node-js-is-Web-Scale"><a href="#Node-js-is-Web-Scale" class="headerlink" title="Node.js is Web Scale"></a>Node.js is Web Scale</h3><h4 id="解题思路-3"><a href="#解题思路-3" class="headerlink" title="解题思路"></a>解题思路</h4><p>分析代码可知，唯一可以执行命令的是 &#x2F;execute 路由，但它只能执行 cmds 中含有的命令。</p>
+<p><img src="/../images/4-0-1.png"></p>
+<p>需要通过污染 cmds 中的命令，即通过添加一个能执行 cat &#x2F;flag 命令的 cmds，就能够得到 flag。</p>
+<p><img src="/../images/4-0-0.png"></p>
+<p>而 &#x2F;set 路由中正好存在原型链污染漏洞。</p>
+<p><img src="/../images/4-0-2.png"></p>
+<p>于是构建一个键值对，污染进 cmds 中。</p>
+<p><img src="/../images/4-0-3.png"></p>
+<p>通过 &#x2F;execute 路由得到 flag。</p>
+<p><img src="/../images/4-0-4.png"></p>
+<h3 id="PaoluGPT"><a href="#PaoluGPT" class="headerlink" title="PaoluGPT"></a>PaoluGPT</h3><h4 id="解题思路-4"><a href="#解题思路-4" class="headerlink" title="解题思路"></a>解题思路</h4><p>在源代码中的 app.py 下可以发现 view 类存在 SQL 注入漏洞。通过改变 conversation_id 的值可以进行 SQL 注入。</p>
+<p><img src="/../images/3-0.png"></p>
+<p>在 database.py 下可知数据库类型是 SQLite 。</p>
+<p><img src="/../images/3-0-1.png"></p>
+<p>先通过 SQLite 的 SQL 命令查询表的名称。发现只有一个叫做 messages 的表。</p>
+<p><img src="/../images/3-0-2.png"></p>
+<p>得知表名之后，即可进一步查找列名。推测其中 id 为表的编码，title 为标题，contents 为内容，shown为是否隐藏。</p>
+<p><img src="/../images/3-0-3.png"></p>
+<p>对 id 、contents 进行联合查询，令 shown &#x3D; 0，可以发现查找到的内容页面宽度存在异常。</p>
+<p><img src="/../images/3-0-4.png"></p>
+<p>将其拉到底部，得到 flag。</p>
+<p><img src="/../images/3-0-5.png"></p>
+<p>然后继续查询，通过注入 1’ OR contents LIKE ‘%flag%’ – 来查询非隐藏表中内容含有 flag 字符的表。同样可以发现页面宽度存在异常。</p>
+<p><img src="/../images/3-1-4.png"></p>
+<p>将其拉到底部，得到另一个 flag。</p>
+<p><img src="/../images/3-1-5.png"></p>
+<h1 id="General"><a href="#General" class="headerlink" title="General"></a>General</h1><h3 id="猫咪问答（Hackergame-十周年纪念版）"><a href="#猫咪问答（Hackergame-十周年纪念版）" class="headerlink" title="猫咪问答（Hackergame 十周年纪念版）"></a>猫咪问答（Hackergame 十周年纪念版）</h3><h4 id="解题思路-5"><a href="#解题思路-5" class="headerlink" title="解题思路"></a>解题思路</h4><p>第 1 题，通过查看历年的 hackergame 信息，可知 2015 年举办的是第二届 hackergame 比赛。可以在历年比赛信息中查找到相关信息，得知讲座在 3A204 教室举行。</p>
+<p><img src="/../images/3-5-3.png"></p>
+<p>第 2 题，一一尝试近 5 年注册 hackergame的人数即可，正确答案为 2682。</p>
+<p><img src="/../images/3-5-1.png"></p>
+<p>第 3 题，推测 2018 年的猫咪问答中有一题涉及到此书。查询题目可知书名是《程序员的自我修养》。</p>
+<p><img src="/../images/3-5-5.png"></p>
+<p>第 4 题，直接爆破。答案是 336。</p>
+<p><img src="/../images/3-5.png"></p>
+<p>第 5 题，可以在 GitHub 上查找到相关内容。答案为 6e90b6。</p>
+<p><img src="/../images/3-5-0.png"></p>
+<p>第 6 题，直接爆破。答案是 1833。</p>
+<p><img src="/../images/3-5-2.png"></p>
+<p>从而得到 flag。</p>
+<p><img src="/../images/3-5-4.png"></p>
+<h3 id="打不开的盒"><a href="#打不开的盒" class="headerlink" title="打不开的盒"></a>打不开的盒</h3><h4 id="解题思路-6"><a href="#解题思路-6" class="headerlink" title="解题思路"></a>解题思路</h4><p>得到的附件是一个 .stl 类型的文件，可以通过在线 3D 打印文件查看器直接打开。链接：<a target="_blank" rel="noopener" href="https://imagetostl.com/cn/view-stl-online#convert%E3%80%82%E6%89%93%E5%BC%80%E5%90%8E%E5%8D%B3%E5%8F%AF%E5%BE%97%E5%88%B0">https://imagetostl.com/cn/view-stl-online#convert。打开后即可得到</a> flag。</p>
+<p><img src="/../images/2-1731127293339-3.png"></p>
+<h3 id="每日论文太多了！"><a href="#每日论文太多了！" class="headerlink" title="每日论文太多了！"></a>每日论文太多了！</h3><h4 id="解题思路-7"><a href="#解题思路-7" class="headerlink" title="解题思路"></a>解题思路</h4><p>下载论文文件后，查询 flag，发现在第 6 页存在结果，藏在了图片后面。</p>
+<p><img src="/../images/3-4-0.png"></p>
+<p>从而得到 flag。</p>
+<h3 id="旅行照片4-0"><a href="#旅行照片4-0" class="headerlink" title="旅行照片4.0"></a>旅行照片4.0</h3><h4 id="解题思路-题目1-2"><a href="#解题思路-题目1-2" class="headerlink" title="解题思路(题目1-2)"></a>解题思路(题目1-2)</h4><p>首先根据图片得到提示，地点在科里科气科创驿站。在地图上搜索并定位到其位置，可知其应该离中科大东校区西门最近。</p>
+<p><img src="/../images/2-0-1.png"></p>
+<p>之后直接搜索“中国科学技术大学ACG音乐会”，即可得知音乐会日期。</p>
+<p><img src="/../images/2-0-2.png"></p>
+<p>从而得到 flag。</p>
+<p><img src="/../images/2-0.png"></p>
+<h4 id="解题思路-题目3-4"><a href="#解题思路-题目3-4" class="headerlink" title="解题思路(题目3-4)"></a>解题思路(题目3-4)</h4><p>首先根据给出的图片，可以注意到垃圾箱上“六安园林”的字样，于是可以推断这一定是一个六安的公园。在搜索“六安公园”后，发现六安市中央森林公园是最可能的地点，不仅环境相似，也有着很高的旅游热度。</p>
+<p>其次用百度识图识别第二张图片，可以找到一张极为相似的图片。点击进入原网页，可以知道是在三峡大坝的坛子岭景区拍摄的。</p>
+<p><img src="/../images/2-1-0.png"></p>
+<p>从而得到 flag。</p>
+<p><img src="/../images/2-1-1.png"></p>
+<h4 id="解题思路-题目5-6"><a href="#解题思路-题目5-6" class="headerlink" title="解题思路(题目5-6)"></a>解题思路(题目5-6)</h4><p>观察给出的图片，其中的动车组有明显特征，为怀密号。在百度百科上即可得知列车的型号。</p>
+<p><img src="/../images/2-2-0.png"></p>
+<p>同时也可以得知怀密号途径的车站，图片中的车站应该是其中的一个。观察图片，得知车站名称应该是两个字。符合条件的只有清河站，而清河站最近的医院是积水潭医院。</p>
+<p><img src="/../images/2-2-2.png"></p>
+<p>从而得到 flag。</p>
+<p><img src="/../images/2-2-1.png"></p>
+<h1 id="Math"><a href="#Math" class="headerlink" title="Math"></a>Math</h1><h3 id="强大的正则表达式"><a href="#强大的正则表达式" class="headerlink" title="强大的正则表达式"></a>强大的正则表达式</h3><h4 id="解题思路-8"><a href="#解题思路-8" class="headerlink" title="解题思路"></a>解题思路</h4><p>分析代码可知，当难度为 1 时，要求给出只使用 0123456789()|* 的正则表达式，来匹配所有可以被 16 整除的数字，且其他数字不可被匹配。由于能被 16 整除的数字的特征是后 4 位可以被 16 整除，所以只需要构造出满足后 4 位可以被 16 整除，前面位数的数字不必考虑的正则表达式即可。提交正则表达式，得到 flag。</p>
+<p><img src="/../images/3-3-0.png"></p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><pre><code class="python">#难度为1时的解题代码
+divisible_by_16 = [f&quot;&#123;i:04d&#125;&quot; for i in range(0, 10000, 16)]
+
+regex_suffixes = &quot;|&quot;.join(divisible_by_16)
+
+regex = f&quot;(0|1|2|3|4|5|6|7|8|9)*(&#123;regex_suffixes&#125;)&quot;
+
+print(regex)
+</code></pre>
+<h3 id="惜字如金-3-0"><a href="#惜字如金-3-0" class="headerlink" title="惜字如金 3.0"></a>惜字如金 3.0</h3><h4 id="解题思路-9"><a href="#解题思路-9" class="headerlink" title="解题思路"></a>解题思路</h4><p>题目类似于一道把 python 代码修改、补充正确的题目。可以先将给出的惜字如金化后的代码上传，可以得到有问题的列的提示，之后修正有问题的列即可。由于都被填充到了 80 个字符，可以借此判断缺少的字符数量，更易于代码的修正。上传正确的题目 a 的 python 代码后，得到 flag。</p>
+<p><img src="/../images/3-3-2.png"></p>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><pre><code class="python">![3-3-4](C:\Users\20213\Desktop\hacker\pic-1\3-3-4.png)#!/usr/bin/python3                                                              
+                                                                                
+import atexit, base64, flask, itertools, os, re                                 
+                                                                                
+                                                                                
+def crc(input: bytes) -&gt; int:                                                   
+    poly, poly_degree = &#39;AaaaaaAaaaAAaaaaAAAAaaaAAAaAaAAAAaAAAaaAaaAaaAaaA&#39;, 48 
+    assert len(poly) == poly_degree + 1 and poly[0] == poly[poly_degree] == &#39;A&#39; 
+    flip = sum([&#39;a&#39;, &#39;A&#39;].index(poly[i + 1]) &lt;&lt; i for i in range(poly_degree))  
+    digest = (1 &lt;&lt; poly_degree) - 1                                             
+    for b in input:                                                             
+        digest = digest ^ b                                                     
+        for _ in range(8):                                                      
+            digest = (digest &gt;&gt; 1) ^ (flip if digest &amp; 1 == 1 else 0)           
+    return digest ^ (1 &lt;&lt; poly_degree) - 1                                      
+                                                                                
+                                                                                
+def hash(input: bytes) -&gt; bytes:                                                
+    digest = crc(input)                                                         
+    u2, u1, u0 = 0xCb4EcdfD0A9F, 0xa9dec1C1b7A3, 0x60c4B0aAB4Bf                 
+    assert (u2, u1, u0) == (223539323800223, 186774198532003, 106397893833919)  
+    digest = (digest * (digest * u2 + u1) + u0) % (1 &lt;&lt; 48)                     
+    return digest.to_bytes(48 // 8, &#39;little&#39;)                                   
+                                                                                
+                                                                                
+def xzrj(input: bytes) -&gt; bytes:                                                
+    pat, repl = rb&#39;([B-DF-HJ-NP-TV-Z])\1*(E(?![A-Z]))?&#39;, rb&#39;\1&#39;                 
+    return re.sub(pat, repl, input, flags=re.IGNORECASE)                        
+                                                                                
+                                                                                
+paths: list[bytes] = []                                                         
+                                                                                
+xzrj_bytes: bytes = bytes()                                                     
+                                                                                
+with open(__file__, &#39;rb&#39;) as f:                                                 
+    for row in f.read().splitlines():                                           
+        row = (row.rstrip() + b&#39; &#39; * 80)[:80]                                   
+        path = base64.b85encode(hash(row)) + b&#39;.txt&#39;                            
+        with open(path, &#39;wb&#39;) as pf:                                            
+            pf.write(row)                                                       
+            paths.append(path)                                                  
+            xzrj_bytes += xzrj(row) + b&#39;\r\n&#39;                                   
+                                                                                
+    def clean():                                                                
+        for path in paths:                                                      
+            try:                                                                
+                os.remove(path)                                                 
+            except FileNotFoundError:                                           
+                pass                                                            
+                                                                                
+    atexit.register(clean)                                                      
+                                                                                
+                                                                                
+bp: flask.Blueprint = flask.Blueprint(&#39;answer_a&#39;, __name__)                     
+                                                                                
+                                                                                
+@bp.get(&#39;/answer_a.py&#39;)                                                         
+def get() -&gt; flask.Response:                                                    
+    return flask.Response(xzrj_bytes, content_type=&#39;text/plain; charset=UTF-8&#39;) 
+                                                                                
+                                                                                
+@bp.post(&#39;/answer_a.py&#39;)                                                        
+def post() -&gt; flask.Response:                                                   
+    wrong_hints = &#123;&#125;                                                            
+    req_lines = flask.request.get_data().splitlines()                           
+    iter = enumerate(itertools.zip_longest(paths, req_lines), start=1)          
+    for index, (path, req_row) in iter:                                         
+        if path is None:                                                        
+            wrong_hints[index] = &#39;Too many lines for request data&#39;              
+            break                                                               
+        if req_row is None:                                                     
+            wrong_hints[index] = &#39;Too few lines for request data&#39;               
+            continue                                                            
+        req_row_hash = hash(req_row)                                            
+        req_row_path = base64.b85encode(req_row_hash) + b&#39;.txt&#39;                 
+        if not os.path.exists(req_row_path):                                    
+            wrong_hints[index] = f&#39;Unmatched hash (&#123;req_row_hash.hex()&#125;)&#39;       
+            continue                                                            
+        with open(req_row_path, &#39;rb&#39;) as pf:                                    
+            row = pf.read()                                                     
+            if len(req_row) != len(row):                                        
+                wrong_hints[index] = f&#39;Unmatched length (&#123;len(req_row)&#125;)&#39;       
+                continue                                                        
+            unmatched = [req_b for b, req_b in zip(row, req_row) if b != req_b] 
+            if unmatched:                                                       
+                wrong_hints[index] = f&#39;Unmatched data (0x&#123;unmatched[-1]:02X&#125;)&#39;  
+                continue                                                        
+            if path != req_row_path:                                            
+                wrong_hints[index] = f&#39;Matched but in other lines&#39;              
+                continue                                                        
+    if wrong_hints:                                                             
+        return &#123;&#39;wrong_hints&#39;: wrong_hints&#125;, 400                                
+    with open(&#39;answer_a.txt&#39;, &#39;rb&#39;) as af:                                      
+        answer_flag = base64.b85decode(af.read()).decode()                      
+        closing, opening = answer_flag[-1:], answer_flag[:5]                    
+        assert closing == &#39;&#125;&#39; and opening == &#39;flag&#123;&#39;                            
+        return &#123;&#39;answer_flag&#39;: answer_flag&#125;, 200                                
+</code></pre>
+<h3 id="优雅的不等式"><a href="#优雅的不等式" class="headerlink" title="优雅的不等式"></a>优雅的不等式</h3><h4 id="解题思路-10"><a href="#解题思路-10" class="headerlink" title="解题思路"></a>解题思路</h4><p>构造出满足条件的函数即可。</p>
+<p><img src="/../images/3-3-4.png"></p>
+<h3 id="关灯"><a href="#关灯" class="headerlink" title="关灯"></a>关灯</h3><h4 id="解题思路-11"><a href="#解题思路-11" class="headerlink" title="解题思路"></a>解题思路</h4><p>这是一个 3D 的关灯游戏，需要通过给出的灯光状态，计算所需的开关配置，使得所有灯光都熄灭。高斯消元法可以有效地解决这个问题——在这个灯光拼图中，每个开关都控制着与其相邻的 6 个灯光。我们可以将这个关系建模为一个线性方程组：每个灯光的状态 L[i] 由其对应的开关状态 S[j] 决定，而像 (灯的状态) &#x3D; (开关状态 + 影响周围开关的状态) % 2 这样的方程可以被转化为矩阵表示。从而得到难度为 1 时的 flag。</p>
+<p><img src="/../images/3-2-0.png"></p>
+<p>类似地可以得到难度为 2 时的 flag。</p>
+<p><img src="/../images/3-2-1.png"></p>
+<p>以及难度为 3 时的 flag。</p>
+<p><img src="/../images/3-2-2.png"></p>
+<h4 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h4><pre><code class="python">import numpy as np
+#难度为1时的解题代码，难度为2和3时类似
+
+def gaussian_elimination(a, b):
+    n = len(b)
+    for i in range(n):
+        max_row = i + np.argmax(np.abs(a[i:, i]))
+        a[[i, max_row]] = a[[max_row, i]] 
+        b[i], b[max_row] = b[max_row], b[i]
+
+        for j in range(i+1, n):
+            if a[j, i] == 1: 
+                a[j] = (a[j] + a[i]) % 2
+                b[j] = (b[j] + b[i]) % 2
+
+    x = np.zeros(n, dtype=int)
+    for i in range(n-1, -1, -1):
+        x[i] = (b[i] - np.dot(a[i], x)) % 2
+    
+    return x
+
+def build_system(lights):
+    n = len(lights)
+    a = np.zeros((n, n), dtype=int)
+    b = lights.copy()
+
+    for i in range(3):
+        for j in range(3):
+            for k in range(3):
+                idx = i * 9 + j * 3 + k
+                a[idx, idx] = 1  
+                if i &gt; 0: a[idx, idx - 9] = 1  
+                if i &lt; 2: a[idx, idx + 9] = 1  
+                if j &gt; 0: a[idx, idx - 3] = 1  
+                if j &lt; 2: a[idx, idx + 3] = 1  
+                if k &gt; 0: a[idx, idx - 1] = 1  
+                if k &lt; 2: a[idx, idx + 1] = 1  
+
+    return a, b
+
+def main():
+    lights_string = input(&quot;输入灯的状态：&quot;)
+    lights = np.array(list(map(int, lights_string)))
+
+    a, b = build_system(lights)
+
+    switch_states = gaussian_elimination(a, b)
+
+    print(&#39;&#39;.join(map(str, switch_states)))
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/hackergame-2024/" style="color: #ff7d73">hackergame 2024</a>
+        </span>
+        
+    </div>
+    <a href="/2024/11/09/hackergame-2024-%E4%B8%AA%E4%BA%BAwp/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2024/11/08/2024-SHCTF-Week3-%E4%B8%AA%E4%BA%BAwp/">
         <h2 class="post-title">2024-SHCTF-Week3 个人wp</h2>
     </a>
@@ -287,7 +581,7 @@ print(bytes.fromhex(hex(seed)[2:]))
         
         <span class="tag">
             
-            <a href="/tags/2024-SHCTF/" style="color: #00a596">2024 SHCTF</a>
+            <a href="/tags/2024-SHCTF/" style="color: #03a9f4">2024 SHCTF</a>
         </span>
         
     </div>
@@ -446,7 +740,7 @@ else:
         
         <span class="tag">
             
-            <a href="/tags/2024-SHCTF/" style="color: #ffa2c4">2024 SHCTF</a>
+            <a href="/tags/2024-SHCTF/" style="color: #00a596">2024 SHCTF</a>
         </span>
         
     </div>
@@ -869,7 +1163,7 @@ print(original_input)
         
         <span class="tag">
             
-            <a href="/tags/2024-SHCTF/" style="color: #03a9f4">2024 SHCTF</a>
+            <a href="/tags/2024-SHCTF/" style="color: #ff7d73">2024 SHCTF</a>
         </span>
         
     </div>
